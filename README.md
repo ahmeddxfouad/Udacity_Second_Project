@@ -1,54 +1,77 @@
-# Storefront Backend Project
+# API Requirements
+The company stakeholders want to create an online storefront to showcase their great product ideas. Users need to be able to browse an index of all products, see the specifics of a single product, and add products to an order that they can view in a cart page. You have been tasked with building the API that will support this application, and your coworker is building the frontend.
+
+These are the notes from a meeting with the frontend developer that describe what endpoints the API needs to supply, as well as data shapes the frontend and backend have agreed meet the requirements of the application. 
 
 ## Getting Started
+- Base URL: The app is hosted locally at 'http://172.0.0.1:3000'
 
-This repo contains a basic Node and Express app to get you started in constructing an API. To get started, clone this repo and run `yarn` in your terminal at the project root.
+## Returned Error Codes
+- 400: Bad Request
+- 401: Not Authorized
+- 404: Not Found
+- 500: Internal Server Error
 
-## Required Technologies
-Your application must make use of the following libraries:
-- Postgres for the database
-- Node/Express for the application logic
-- dotenv from npm for managing environment variables
-- db-migrate from npm for migrations
-- jsonwebtoken from npm for working with JWTs
-- jasmine from npm for testing
+## API Endpoints
+#### Products
+- Index ('/products')
+- Show  ('/products/:id')
+- Create ('/products') [token required] 
 
-## Steps to Completion
+#### Users
+- Index ('/users') [token required] 
+- Show  ('/users/:id') [token required] 
+- Create ('/users') [token required]
 
-### 1. Plan to Meet Requirements
+#### Orders
+- Index ('/orders') [token required]
+- Show ('/orders/:id') [token required]
+- Create Order ('/orders') [token required]
+- Add Product ('/orders/:id') [token required]
+- Current Order by user ('/users/:userId/orders') (args: user id) [token required]
 
-In this repo there is a `REQUIREMENTS.md` document which outlines what this API needs to supply for the frontend, as well as the agreed upon data shapes to be passed between front and backend. This is much like a document you might come across in real life when building or extending an API. 
+## Data Shapes
+#### Product
+-  id
+- name
+- price
+- [OPTIONAL] category
 
-Your first task is to read the requirements and update the document with the following:
-- Determine the RESTful route for each endpoint listed. Add the RESTful route and HTTP verb to the document so that the frontend developer can begin to build their fetch requests.    
-**Example**: A SHOW route: 'blogs/:id' [GET] 
+#### User
+- id
+- username
+- firstName
+- lastName
+- password
+- role
 
-- Design the Postgres database tables based off the data shape requirements. Add to the requirements document the database tables and columns being sure to mark foreign keys.   
-**Example**: You can format this however you like but these types of information should be provided
-Table: Books (id:varchar, title:varchar, author:varchar, published_year:varchar, publisher_id:string[foreign key to publishers table], pages:number)
+#### Orders
+- id
+- user_id
+- status of order (active or complete)
 
-**NOTE** It is important to remember that there might not be a one to one ratio between data shapes and database tables. Data shapes only outline the structure of objects being passed between frontend and API, the database may need multiple tables to store a single shape. 
+#### order product
+- id
+- order_id
+- product_id
+- quantity
 
-### 2.  DB Creation and Migrations
+## Running
+To run the code, run
+```
+npm run start
+```
 
-Now that you have the structure of the databse outlined, it is time to create the database and migrations. Add the npm packages dotenv and db-migrate that we used in the course and setup your Postgres database. If you get stuck, you can always revisit the database lesson for a reminder. 
+## Testing
+Testing is done using jasmine
+To run the tests, run
+```
+npm run test
+```
 
-You must also ensure that any sensitive information is hashed with bcrypt. If any passwords are found in plain text in your application it will not pass.
+## Author
+<sup>Ahmed Fouad 
 
-### 3. Models
-
-Create the models for each database table. The methods in each model should map to the endpoints in `REQUIREMENTS.md`. Remember that these models should all have test suites and mocks.
-
-### 4. Express Handlers
-
-Set up the Express handlers to route incoming requests to the correct model method. Make sure that the endpoints you create match up with the enpoints listed in `REQUIREMENTS.md`. Endpoints must have tests and be CORS enabled. 
-
-### 5. JWTs
-
-Add JWT functionality as shown in the course. Make sure that JWTs are required for the routes listed in `REQUIUREMENTS.md`.
-
-### 6. QA and `README.md`
-
-Before submitting, make sure that your project is complete with a `README.md`. Your `README.md` must include instructions for setting up and running your project including how you setup, run, and connect to your database. 
-
-Before submitting your project, spin it up and test each endpoint. If each one responds with data that matches the data shapes from the `REQUIREMENTS.md`, it is ready for submission!
+### Acknowledgments
+- sharp docs https://sharp.pixelplumbing.com/api-input#metadata
+- eslint docs https://eslint.org/docs/user-guide/command-line-interface
