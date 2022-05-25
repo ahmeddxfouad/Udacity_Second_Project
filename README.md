@@ -3,6 +3,45 @@ The company stakeholders want to create an online storefront to showcase their g
 
 These are the notes from a meeting with the frontend developer that describe what endpoints the API needs to supply, as well as data shapes the frontend and backend have agreed meet the requirements of the application. 
 
+## Setup
+
+### Database Configuration
+## .env File
+- POSTGRES_HOST
+- POSTGRES_DB
+- POSTGRES_USER
+- POSTGRES_PASSWORD
+- NODE_ENV (dev, test)
+- BCRYPT_SECRET
+- SALT_ROUNDS
+- TOKEN_SECRET
+
+### Database Schema
+#### Products
+- id (Primary Key)
+- name
+- price
+- category
+
+#### Users
+- id (Primary Key)
+- username
+- firstName
+- lastName
+- password
+- role
+
+#### Orders
+- id (Primary Key)
+- user_id (Refrenced from Users table)
+- completed (status of order (true = complete or false = active)
+
+### Order Product
+- id 
+- order_id (Refrenced from Orders table, part of composite key)
+- product_id (Refrenced from Products table, part of composite key)
+- quantity
+
 ## Getting Started
 - Base URL: The app is hosted locally at 'http://172.0.0.1:3000'
 
@@ -14,47 +53,38 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ## API Endpoints
 #### Products
-- Index ('/products')
-- Show  ('/products/:id')
-- Create ('/products') [token required] 
+- Index ('/products') [GET] 
+- Show  ('/products/:id') [GET] 
+- Create ('/products') [token required] [POST] 
 
 #### Users
-- Index ('/users') [token required] 
-- Show  ('/users/:id') [token required] 
-- Create ('/users') [token required]
+- Index ('/users') [token required] [GET] 
+- Show  ('/users/:id') [token required] [GET] 
+- Create ('/users') [token required] [POST] 
 
 #### Orders
-- Index ('/orders') [token required]
-- Show ('/orders/:id') [token required]
-- Create Order ('/orders') [token required]
-- Add Product ('/orders/:id') [token required]
-- Current Order by user ('/users/:userId/orders') (args: user id) [token required]
+- Index ('/orders') [token required] [GET] 
+- Show ('/orders/:id') [token required] [GET] 
+- Create Order ('/orders') [token required] [POST] 
+- Add Product ('/orders/:id') [token required] [POST] 
+- Current Order by user ('/users/:userId/orders') (args: user id) [token required] [GET] 
 
-## Data Shapes
-#### Product
--  id
-- name
-- price
-- category
+## Setting Up
+First Connect to pgsql,
+Then to create the Database
+```
+CREATE DATABASE store;
+```
 
-#### User
-- id
-- username
-- firstName
-- lastName
-- password
-- role
+To create the tables and schema
+```
+npm run devup
+```
 
-#### Orders
-- id
-- user_id
-- status of order (active or complete)
-
-#### order product
-- id
-- order_id
-- product_id
-- quantity
+To undo the creation of the tables and schema
+```
+npm run devdown
+```
 
 ## Running
 To run the code, run
