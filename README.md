@@ -18,6 +18,7 @@ These are the notes from a meeting with the frontend developer that describe wha
 - SALT_ROUNDS
 - TOKEN_SECRET
 
+<<<<<<< HEAD
 ## Running Options
 - Run your app first on the testing enviroment by changing the NODE_ENV in the .env file to be test.
 - Run your app on the development phase after checking that everything is correct by changing the NODE_ENV in the .env file to be dev.
@@ -49,14 +50,15 @@ user_id  | integer (references users(id))
 completed  | boolean
 
 ### Order Product
+primary key (order_id,product_id)
 Name  | Type
 ------------- | -------------
 id  | number (Primary Key)
 order_id  | integer references orders(id) 
 product_id  | integer references products(id)
 quantity  | integer
-primary key (order_id,product_id)
 
+=======
 ## Getting Started
 - Base URL: The app is hosted locally at 'http://172.0.0.1:3000'
 
@@ -89,7 +91,10 @@ First Connect to pgsql,
 Then to create the Database
 ```
 CREATE DATABASE store;
+<<<<<<< HEAD
 CREATE DATABASE teststore;
+=======
+>>>>>>> refs/remotes/origin/main
 ```
 
 To create the tables and schema
@@ -121,4 +126,7 @@ npm run test
 ### Acknowledgments
 - sharp docs https://sharp.pixelplumbing.com/api-input#metadata
 - eslint docs https://eslint.org/docs/user-guide/command-line-interface
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/remotes/origin/main
