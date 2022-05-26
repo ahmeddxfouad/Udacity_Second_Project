@@ -3,6 +3,61 @@ The company stakeholders want to create an online storefront to showcase their g
 
 These are the notes from a meeting with the frontend developer that describe what endpoints the API needs to supply, as well as data shapes the frontend and backend have agreed meet the requirements of the application. 
 
+## Setup
+
+### Database Configuration
+## Database Port
+- Database is running on default port 5432
+## .env File
+- POSTGRES_HOST
+- POSTGRES_DB
+- POSTGRES_USER
+- POSTGRES_PASSWORD
+- NODE_ENV (dev, test)
+- BCRYPT_SECRET
+- SALT_ROUNDS
+- TOKEN_SECRET
+
+## Running Options
+- Run your app first on the testing enviroment by changing the NODE_ENV in the .env file to be test.
+- Run your app on the development phase after checking that everything is correct by changing the NODE_ENV in the .env file to be dev.
+### Database Schema
+
+#### Products
+Name  | Type
+------------- | -------------
+id  | number (Primary Key)
+name  | varchar
+price  | integer
+category  | varchar
+
+#### Users
+create type user_role as ENUM('admin','user');
+Name  | Type
+------------- | -------------
+id  | integer (Primary Key)
+username  | varchar
+fname  | varchar
+lname  | varchar
+password  | varchar
+role  | user_role
+
+#### Orders
+Name  | Type
+------------- | -------------
+id  | number (Primary Key)
+user_id  | integer (references users(id))
+completed  | boolean
+
+### Order Product
+Name  | Type
+------------- | -------------
+id  | number (Primary Key)
+order_id  | integer references orders(id) 
+product_id  | integer references products(id)
+quantity  | integer
+primary key (order_id,product_id)
+
 ## Getting Started
 - Base URL: The app is hosted locally at 'http://172.0.0.1:3000'
 
@@ -14,47 +69,39 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ## API Endpoints
 #### Products
-- Index ('/products')
-- Show  ('/products/:id')
-- Create ('/products') [token required] 
+- Index ('/products') [GET] 
+- Show  ('/products/:id') [GET] 
+- Create ('/products') [token required] [POST] 
 
 #### Users
-- Index ('/users') [token required] 
-- Show  ('/users/:id') [token required] 
-- Create ('/users') [token required]
+- Index ('/users') [token required] [GET] 
+- Show  ('/users/:id') [token required] [GET] 
+- Create ('/users') [token required] [POST] 
 
 #### Orders
-- Index ('/orders') [token required]
-- Show ('/orders/:id') [token required]
-- Create Order ('/orders') [token required]
-- Add Product ('/orders/:id') [token required]
-- Current Order by user ('/users/:userId/orders') (args: user id) [token required]
+- Index ('/orders') [token required] [GET] 
+- Show ('/orders/:id') [token required] [GET] 
+- Create Order ('/orders') [token required] [POST] 
+- Add Product ('/orders/:id') [token required] [POST] 
+- Current Order by user ('/users/:userId/orders') (args: user id) [token required] [GET] 
 
-## Data Shapes
-#### Product
--  id
-- name
-- price
-- [OPTIONAL] category
+## Setting Up
+First Connect to pgsql,
+Then to create the Database
+```
+CREATE DATABASE store;
+CREATE DATABASE teststore;
+```
 
-#### User
-- id
-- username
-- firstName
-- lastName
-- password
-- role
+To create the tables and schema
+```
+npm run devup
+```
 
-#### Orders
-- id
-- user_id
-- status of order (active or complete)
-
-#### order product
-- id
-- order_id
-- product_id
-- quantity
+To undo the creation of the tables and schema
+```
+npm run devdown
+```
 
 ## Running
 To run the code, run
@@ -75,3 +122,4 @@ npm run test
 ### Acknowledgments
 - sharp docs https://sharp.pixelplumbing.com/api-input#metadata
 - eslint docs https://eslint.org/docs/user-guide/command-line-interface
+
