@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npm run devdown && npm run devup && npm run build && npm run jasmine ",
+    "test": "npm run testdown && npm run testup && npm run devdown && npm run devup && npm run build && npm run jasmine ",
     "lint": "eslint . --ext .ts",
     "build": "tsc",
     "start": "nodemon src/index.ts",
