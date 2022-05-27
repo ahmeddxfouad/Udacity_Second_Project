@@ -3,6 +3,9 @@
 import { response } from 'express';
 import supertest from 'supertest';
 import app from '..';
+import client from '../database';
+import { Order, OrderStore } from '../models/order';
+import { Product, ProductStore } from '../models/product';
 import { User, UserStore } from '../models/user';
 
 const test = supertest(app);
@@ -79,8 +82,20 @@ describe('Testing Enviroment', () => {
   });
 
   it('Test Get Specific Product With valid parameter', async () => {
+    const productStore: ProductStore = new ProductStore()
+    const name: string | undefined = "Product1";
+    const price: number = 20;
+    const category: string | undefined = "Food";
+
+    const newProduct: Product = await productStore.create({
+      name,
+      price,
+      category
+    });
+
     const res = await test.get('/products/1');
     expect(res.status).toBe(200);
+    expect(res.type).toContain('json');
   });
 
   it('Test Create Product Without Authentication Token', async () => {
@@ -119,10 +134,19 @@ describe('Testing Enviroment', () => {
   });
 
   it('Test Get Specific Order With Authentication', async () => {
+    const completed: boolean | undefined = false;
+    const user_id: number = 1;
+
+    const orderStore: OrderStore = new OrderStore()
+    
+    const neworder: Order = await orderStore.create({ completed, user_id });
+  
+
     const res = await test
     .get('/orders/1')
     .set('Authorization', 'bearer ' + token)
     expect(res.status).toBe(200);
+    expect(res.type).toContain('json');
   });
 
   it('Test Get Orders for specific User Without Authentication', async () => {
@@ -157,4 +181,46 @@ describe('Testing Enviroment', () => {
     .set('Authorization', 'bearer ' + token)
     expect(res.status).toBe(200);
   });
+});
+
+describe('Testing CRUD Operations', () => {
+
+  it('Test Delete Created Order from DB ', async () => {
+    
+    const conn = await client.connect();
+    
+    const sql =
+        'DELETE FROM order_product WHERE id=1 returning *';
+
+      const result = await conn.query(sql);
+      conn.release();
+      expect(result.rows[0]).toBeNull;
+
+  });
+
+  it('Test Delete Created Product from DB ', async () => {
+    const conn = await client.connect();
+    
+    const sql =
+        'DELETE FROM products WHERE id=1 returning *';
+
+      const result = await conn.query(sql);
+      conn.release();
+      expect(result.rows[0]).toBeNull;
+  });
+
+  it('Test Update Created User from DB ', async () => {
+    const conn = await client.connect();
+    
+    const sql =
+        "UPDATE users SET fname='UpdatedName' WHERE id=1 returning *";
+
+      const result = await conn.query(sql);
+      conn.release();
+      const test: String = String(result.rows[0])
+      expect(result.rows[0]).toBeTruthy();
+      expect(result.rows[0].fname).toEqual("UpdatedName")
+      
+  });
+
 });
