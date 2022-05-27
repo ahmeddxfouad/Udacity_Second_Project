@@ -31,7 +31,6 @@ describe('Testing Enviroment', () => {
         role: 'user'
       })
       .set('Accept', 'application/json');
-
     expect(res.status).toEqual(200);
     token = res.body;
   });
@@ -90,17 +89,6 @@ describe('Testing Enviroment', () => {
   });
 
   it('Test Get Specific Product With valid parameter', async () => {
-    /*const productStore: ProductStore = new ProductStore()
-    const name: string | undefined = "Product1";
-    const price: number = 20;
-    const category: string | undefined = "Food";
-
-    const newProduct: Product = await productStore.create({
-      name,
-      price,
-      category
-    });*/
-
     const res = await test.get('/products/1');
     expect(res.status).toBe(200);
     expect(res.type).toContain('json');
@@ -180,27 +168,103 @@ describe('Testing Enviroment', () => {
 });
 
 describe('Testing CRUD Operations', () => {
-  it('Test Delete Created Order from DB ', async () => {
+  //Order
+  it('Test Insert Order ', async () => {
     const conn = await client.connect();
 
-    const sql = 'DELETE FROM order_product WHERE id=1 returning *';
+    const sql =
+      'INSERT INTO Orders(user_id,completed) VALUES (1,false) returning *';
 
     const result = await conn.query(sql);
     conn.release();
-    expect(result.rows[0]).toBeNull;
+    expect(result.rowCount).toEqual(1);
+  });
+
+  it('Test Select Orders ', async () => {
+    const conn = await client.connect();
+
+    const sql = 'SELECT * FROM Orders;';
+
+    const result = await conn.query(sql);
+    conn.release();
+    expect(result.rowCount).toEqual(2);
+  });
+
+  it('Test Update Created Order ', async () => {
+    const conn = await client.connect();
+
+    const sql = 'UPDATE Orders SET completed=true WHERE id=1 returning *';
+
+    const result = await conn.query(sql);
+    conn.release();
+    expect(result.rows[0].completed).toBeTruthy();
+  });
+
+  it('Test Delete Order from DB ', async () => {
+    const conn = await client.connect();
+
+    const sql = 'DELETE FROM order_product WHERE id=2 returning *';
+
+    const result = await conn.query(sql);
+    conn.release();
+    expect(result.rowCount).toEqual(0);
+  });
+
+  //Product
+  it('Test Insert Product ', async () => {
+    const conn = await client.connect();
+
+    const sql =
+      "INSERT INTO products(name,price,category) VALUES ('product2',50,'Food') returning *";
+
+    const result = await conn.query(sql);
+    conn.release();
+    expect(result.rowCount).toEqual(1);
+  });
+
+  it('Test Select Created Products ', async () => {
+    const conn = await client.connect();
+
+    const sql = 'SELECT * FROM products;';
+
+    const result = await conn.query(sql);
+    conn.release();
+    expect(result.rowCount).toEqual(2);
+  });
+
+  it('Test Update Created Products from DB ', async () => {
+    const conn = await client.connect();
+
+    const sql = 'UPDATE products SET price=200 WHERE id=1 returning *';
+
+    const result = await conn.query(sql);
+    conn.release();
+    expect(result.rows[0].price).toEqual(200);
   });
 
   it('Test Delete Created Product from DB ', async () => {
     const conn = await client.connect();
 
-    const sql = 'DELETE FROM products WHERE id=1 returning *';
+    const sql = 'DELETE FROM products WHERE  id=2 returning *';
 
     const result = await conn.query(sql);
     conn.release();
-    expect(result.rows[0]).toBeNull;
+    expect(result.rowCount).toEqual(1);
   });
 
-  it('Test Update Created User from DB ', async () => {
+  //Users
+  it('Test Insert User ', async () => {
+    const conn = await client.connect();
+
+    const sql =
+      "INSERT INTO users(username,fname,lname,password,role) VALUES ('Testt','Testt','Testt','Pass','user') returning *;";
+
+    const result = await conn.query(sql);
+    conn.release();
+    expect(result.rowCount).toEqual(1);
+  });
+
+  it('Test Update Created User ', async () => {
     const conn = await client.connect();
 
     const sql = "UPDATE users SET fname='UpdatedName' WHERE id=1 returning *";
@@ -210,5 +274,68 @@ describe('Testing CRUD Operations', () => {
 
     expect(result.rows[0]).toBeTruthy();
     expect(result.rows[0].fname).toEqual('UpdatedName');
+  });
+
+  it('Test Select Users ', async () => {
+    const conn = await client.connect();
+
+    const sql = 'SELECT * FROM Users;';
+
+    const result = await conn.query(sql);
+    conn.release();
+    expect(result.rowCount).toEqual(2);
+  });
+
+  it('Test Delete Created User from DB ', async () => {
+    const conn = await client.connect();
+
+    const sql = 'DELETE FROM Users WHERE id=2 returning *';
+
+    const result = await conn.query(sql);
+    conn.release();
+    expect(result.rowCount).toEqual(1);
+  });
+
+  //OrderProduct
+  it('Test Insert Order Product ', async () => {
+    const conn = await client.connect();
+
+    const sql =
+      'INSERT INTO order_product(order_id,product_id,quantity) VALUES (2,1,6) returning *;';
+
+    const result = await conn.query(sql);
+    conn.release();
+    expect(result.rowCount).toEqual(1);
+  });
+
+  it('Test Update Created Product in Order from DB ', async () => {
+    const conn = await client.connect();
+
+    const sql = 'UPDATE order_product SET quantity=100 WHERE id=1 returning *';
+
+    const result = await conn.query(sql);
+    conn.release();
+
+    expect(result.rows[0].quantity).toEqual(100);
+  });
+
+  it('Test Select Order Products ', async () => {
+    const conn = await client.connect();
+
+    const sql = 'SELECT * FROM order_product;';
+
+    const result = await conn.query(sql);
+    conn.release();
+    expect(result.rowCount).toEqual(2);
+  });
+
+  it('Test Delete Created Order Product from DB ', async () => {
+    const conn = await client.connect();
+
+    const sql = 'DELETE FROM order_product WHERE id=2 returning *';
+
+    const result = await conn.query(sql);
+    conn.release();
+    expect(result.rowCount).toEqual(1);
   });
 });
