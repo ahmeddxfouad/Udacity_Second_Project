@@ -24,7 +24,7 @@ export class OrderStore {
       throw new Error();
     }
   }
-
+/*
   async indexByUser(id: number): Promise<Order[]> {
     try {
       const conn = await client.connect();
@@ -36,7 +36,7 @@ export class OrderStore {
       throw new Error();
     }
   }
-
+*/
   async show(id: number): Promise<Order> {
     try {
       const conn = await client.connect();
@@ -48,7 +48,7 @@ export class OrderStore {
       throw new Error();
     }
   }
-
+/*
   async showByUser(id: number, userID: number): Promise<Order> {
     try {
       const conn = await client.connect();
@@ -60,7 +60,7 @@ export class OrderStore {
       throw new Error();
     }
   }
-
+*/
   async create(o: Order): Promise<Order> {
     try {
       const conn = await client.connect();
@@ -108,7 +108,7 @@ export class OrderStore {
       const sql = 'SELECT * from Orders where user_id=$1';
       const result = await conn.query(sql, [id]);
       conn.release();
-      return result.rows[0];
+      return result.rows;
     } catch (err) {
       throw new Error();
     }

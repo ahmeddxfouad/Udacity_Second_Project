@@ -2,6 +2,20 @@
 import supertest from 'supertest';
 import app from '..';
 import client from '../database';
+import { User, UserStore } from '../models/user';
+import bcrypt from 'bcrypt';
+import { ProductStore } from '../models/product';
+import { OrderStore } from '../models/order';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const pepper = process.env.BCRYPT_SECRET;
+const rounds = process.env.SALT_SECRET;
+const userStore : UserStore = new UserStore()
+const productStore : ProductStore = new ProductStore()
+const orderStore : OrderStore = new OrderStore()
+let hashed: string
 
 const test = supertest(app);
 let token: string;
@@ -338,4 +352,121 @@ describe('Testing CRUD Operations', () => {
     conn.release();
     expect(result.rowCount).toEqual(1);
   });
+});
+
+
+describe('Testing model Functions', () => {
+  //Users
+  it('fetch all users', async () => {
+    
+    const u: User = {
+      username: "UserTest",
+      fname: "fTest",
+      lname: "lTest",
+      password: "PassTest",
+      role: "user"
+  }
+
+    const hash: string = bcrypt.hashSync(
+      (u.password as string) + pepper,
+      parseInt(rounds as string)
+    );
+
+
+    const result = await userStore.create({
+      username: u.username,
+      fname: u.fname,
+      lname: u.lname,
+      password: hash,
+      role: "user"
+    })
+
+    
+    const users = await userStore.index()
+    
+    expect(users.length).toBeGreaterThan(0);
+    
+
+  });
+
+  it('Test show function', async () => {
+    
+    
+    const result = await userStore.show(1)
+    
+    expect(result.id).toEqual(1);
+
+  });
+
+ 
+
+//products
+it('fetch all products', async () => {
+    
+  await productStore.create({
+    name: "Product2",
+    price: 300,
+    category: "Food",
+  })
+
+  const products = await productStore.index()
+  
+  expect(products.length).toBeGreaterThan(0);
+
+});
+it('fetch specific product', async () => {
+  
+  
+  const result = await productStore.show(1)
+  
+  expect(result.id).toEqual(1);
+
+});
+
+
+
+//Order
+it('fetch all orders', async () => {
+    
+  const result = await orderStore.create({
+    user_id: 1,
+    completed: false,
+   
+  })
+
+  const orders = await orderStore.index()
+  
+  expect(orders.length).toBeGreaterThan(0);
+
+});
+
+it('fetch specific order', async () => {
+  
+  
+  const result = await orderStore.show(1)
+  
+  expect(result.id).toEqual(1);
+
+});
+
+it('Test getUserOrders function', async () => {
+  
+  
+  const result = await orderStore.getUserOrders(1)
+  
+  expect(result.length).toBeGreaterThan(0);
+
+});
+  
+it('Test Add Product function', async () => {
+  
+  
+  const result = await orderStore.addProduct(2,2,1)
+  
+  expect(result).toBeTruthy();
+
+});
+
+
+
 });

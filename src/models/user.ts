@@ -12,7 +12,7 @@ export type User = {
   username: string;
   fname: string;
   lname: string;
-  password?: string;
+  password: string;
   role: string;
 };
 
@@ -67,11 +67,11 @@ export class UserStore {
       throw new Error();
     }
   }
-
+/*
   async authenticate(username: string, password: string): Promise<User | null> {
     try {
       const conn = await client.connect();
-      const sql = 'SELECT * from users where name =$1';
+      const sql = 'SELECT * from users where username=$1';
       const result = await conn.query(sql, [username]);
       conn.release();
 
@@ -87,4 +87,5 @@ export class UserStore {
       throw new Error();
     }
   }
+  */
 }

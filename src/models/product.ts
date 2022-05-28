@@ -19,11 +19,11 @@ export class ProductStore {
       throw new Error();
     }
   }
-
+/*
   async indexByUser(id: number): Promise<Product[]> {
     try {
       const conn = await client.connect();
-      const sql = 'SELECT * from products where user_id=$1';
+      const sql = 'SELECT * from order_products where user_id=$1';
       const result = await conn.query(sql, [id]);
       conn.release();
       return result.rows;
@@ -31,7 +31,7 @@ export class ProductStore {
       throw new Error();
     }
   }
-
+*/
   async show(id: number): Promise<Product> {
     try {
       const conn = await client.connect();
@@ -43,7 +43,7 @@ export class ProductStore {
       throw new Error();
     }
   }
-
+/*
   async showByUser(id: number, userID: number): Promise<Product> {
     try {
       const conn = await client.connect();
@@ -55,7 +55,7 @@ export class ProductStore {
       throw new Error();
     }
   }
-
+*/
   async create(p: Product): Promise<Product> {
     try {
       const conn = await client.connect();
