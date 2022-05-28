@@ -67,7 +67,7 @@ export class UserStore {
       throw new Error();
     }
   }
-/*
+  /*
   async authenticate(username: string, password: string): Promise<User | null> {
     try {
       const conn = await client.connect();

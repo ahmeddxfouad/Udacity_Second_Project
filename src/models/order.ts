@@ -24,7 +24,7 @@ export class OrderStore {
       throw new Error();
     }
   }
-/*
+  /*
   async indexByUser(id: number): Promise<Order[]> {
     try {
       const conn = await client.connect();
@@ -48,7 +48,7 @@ export class OrderStore {
       throw new Error();
     }
   }
-/*
+  /*
   async showByUser(id: number, userID: number): Promise<Order> {
     try {
       const conn = await client.connect();

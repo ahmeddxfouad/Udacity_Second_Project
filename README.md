@@ -11,6 +11,7 @@ These are the notes from a meeting with the frontend developer that describe wha
 ## .env File
 - POSTGRES_HOST
 - POSTGRES_DB
+- POSTGRES_TESTDB
 - POSTGRES_USER
 - POSTGRES_PASSWORD
 - NODE_ENV (dev, test)
@@ -100,11 +101,13 @@ CREATE DATABASE teststore;
 To create the tables and schema
 ```
 npm run devup
+npm run testup "For testing enviroment"
 ```
 
 To undo the creation of the tables and schema
 ```
 npm run devdown
+npm run testdown "For testing enviroment"
 ```
 
 ## Running
@@ -118,6 +121,7 @@ Testing is done using jasmine
 To run the tests, run
 ```
 npm run test
+npm run testing "For testing enviroment"
 ```
 
 ## Author

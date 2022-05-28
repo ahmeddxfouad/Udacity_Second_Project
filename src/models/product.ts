@@ -19,7 +19,7 @@ export class ProductStore {
       throw new Error();
     }
   }
-/*
+  /*
   async indexByUser(id: number): Promise<Product[]> {
     try {
       const conn = await client.connect();
@@ -43,7 +43,7 @@ export class ProductStore {
       throw new Error();
     }
   }
-/*
+  /*
   async showByUser(id: number, userID: number): Promise<Product> {
     try {
       const conn = await client.connect();
